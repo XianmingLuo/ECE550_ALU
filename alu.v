@@ -10,12 +10,13 @@ module alu(data_operandA, data_operandB, ctrl_ALUopcode, ctrl_shiftamt, data_res
 	wire [31:0] notB;
 	wire [31:0] finalB;
 	wire cin;
+	genvar i;
 	generate
-		for (i = 0; i< 32; i = i + 1) begin
+		for (i = 0; i< 32; i = i + 1) begin : inverter
 			not not_gate(notB[i], data_operandB[i]);
 		end
 	endgenerate
-	assign finalB = ctrl_ALUopcode[0] == 0 ? B : notB;
+	assign finalB = ctrl_ALUopcode[0] == 0 ? data_operandB : notB;
 	assign cin = ctrl_ALUopcode[0] == 0 ? 0 : 1;
 	Adder adder(data_result, overflow, data_operandA, finalB, cin);
 
